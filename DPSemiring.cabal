@@ -17,7 +17,7 @@ cabal-version:       >=1.10
 
 executable DPSemiring
   main-is:             Main.hs
-  other-modules: DPSolver.DP, DPSolver.Internals, DPSolver.SolverAPI, DPSolver.SolverInternal, DPSolver.Solvers, DPSolver.TopDown, Examples.SPDP, Explanation.Decomposed, Explanation.Dominators, Explanation.Labeled, Semiring.Large, Semiring.Semiring, Semiring.View
+  other-modules: Semiring.View, DPSolver.DP, DPSolver.Internals, DPSolver.SolverAPI, DPSolver.SolverInternal, DPSolver.Solvers, DPSolver.TopDown, Examples.SPDP, Explanation.Decomposed, Explanation.Dominators, Explanation.Labeled, Semiring.Large, Semiring.Semiring, Examples.KnapSackDP, Semiring.MaxPlus, Examples.KnapSackDP
   other-extensions:    GeneralizedNewtypeDeriving, FlexibleContexts, FlexibleInstances, TypeFamilies, KindSignatures, ExistentialQuantification, ConstraintKinds, AllowAmbiguousTypes, MultiParamTypeClasses, FunctionalDependencies
   build-depends:       base >=4.11 && <4.12, containers >=0.5 && <0.6, mtl >=2.2 && <2.3, safe >=0.3 && <0.4, array >=0.5 && <0.6, list-tries >=0.6 && <0.7
   hs-source-dirs:      src

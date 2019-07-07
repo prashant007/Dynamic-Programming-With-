@@ -1,6 +1,6 @@
 module Explanation.Labeled where
 
-data Labeled a = Label String a
+data Labeled a = Label String a deriving Show 
 
 
 unlabel :: Labeled a -> a
@@ -19,13 +19,13 @@ instance Functor Labeled where
 
 instance Applicative Labeled where
   pure = Label "" 
-  Label s1 f <*> Label s2 x = Label (s1 ++ s2) (f x)
+  Label s1 f <*> Label s2 x = Label s1 (f x)
 
 
 instance Num a => Num (Labeled a) where
-  Label s1 x + Label s2 y = Label (s1 ++ s2) (x+y)
-  Label s1 x * Label s2 y = Label (s1 ++ s2) (x*y)
-  Label s1 x - Label s2 y = Label (s1 ++ s2) (x-y)
+  Label s1 x + Label s2 y = Label s1 (x+y)
+  Label s1 x * Label s2 y = Label s1 (x*y)
+  Label s1 x - Label s2 y = Label s1 (x-y)
   negate = fmap negate
   abs    = fmap negate
   signum = fmap signum

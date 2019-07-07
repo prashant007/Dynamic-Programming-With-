@@ -12,7 +12,7 @@ data Large a = Finite a | Infinity deriving (Eq,Ord)
 
 instance Functor Large where
   fmap f (Finite x) = Finite (f x)
-  fmap _ Infinity = Infinity
+  fmap _ Infinity   = Infinity
 
 instance Applicative Large where
   pure = Finite

@@ -19,7 +19,7 @@ import Semiring.Large
 import Semiring.View
 
 import Explanation.Decomposed
-import Explanation.Labeled
+--import Explanation.Labeled
 import Explanation.Dominators
 
 import Data.List (sortBy)
@@ -102,8 +102,6 @@ instance SP [Double] (Large (Decomposed Double)) where
 -- instance SP [Double] (Path DOUBLES) where
 instance SP [Double] (Path (Large (Decomposed Double))) where
   result (e,l) = V (Finite (Values l)) [e]
-
-
 
 -- Examples
 --
