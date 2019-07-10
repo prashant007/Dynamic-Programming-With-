@@ -17,11 +17,11 @@ import Semiring.Semiring
 -- Local imports
 import Semiring.Large
 import Semiring.View
-import Semiring.MaxPlus
+import Semiring.Small
 
-import Explanation.Decomposed
-import Explanation.Labeled
-import Explanation.Dominators
+import Explain.Decomposed
+import Explain.Labeled
+import Explain.Dominators
 
 import Data.List (sortBy)
 import Data.Function (on)
@@ -40,8 +40,8 @@ class Semiring r => KS l r where
   ks t (0,_) = one
   ks t (_,0) = one 
   ks t (k,b) 
-    | wk > b    = memoize(k-1,b)
-    | otherwise = memoize(k-1,b) <+> ((constant.result) (nk,vk) <.> memoize (k-1,b-wk))
+    | wk > b    = memo(k-1,b)
+    | otherwise = memo(k-1,b) <+> ((inj.result) (nk,vk) <.> memo (k-1,b-wk))
     where
       tk@(nk,wk,vk) = t !! (k-1)
 
@@ -51,27 +51,27 @@ class Semiring r => KS l r where
 
 -- (1) length, non-decomposed
 --
-instance KS Double (NegInf Double) where
-  result (_,l) = Fin l
+instance KS Double (Small Double) where
+  result (_,l) = Finite' l
 
 
 -- (2) path, non-decomposed
 --
-instance KS Double (Path (NegInf Double)) where
-  result (e,l) = V (Fin l) [e]
+instance KS Double (Path (Small Double)) where
+  result (e,l) = View (Finite' l) [e]
 
 
-instance KS [Double] (NegInf (Decomposed Double)) where
-  result (_,l) = Fin (Values l)
+instance KS [Double] (Small (Decomposed Double)) where
+  result (_,l) = Finite' (Values l)
 
 -- instance SP [Double] (Path DOUBLES) where
-instance KS [Double] (Path (NegInf (Decomposed Double))) where
-  result (e,l) = V (Fin (Values l)) [e]
+instance KS [Double] (Path (Small (Decomposed Double))) where
+  result (e,l) = View (Finite' (Values l)) [e]
 
 
-instance Decompose (NegInf (Decomposed Double)) Double where
-  dec NegInf = Values []
-  dec (Fin vs) = vs
+instance Decompose (Small (Decomposed Double)) Double where
+  dec NegInfinity = Values []
+  dec (Finite' vs) = vs
   -- lift = Finite
   supportive _ x = x < 0
 
@@ -92,13 +92,13 @@ triple2:: [(String,Double,[Double])]
 triple2 = zip3 names1 weights1 values2
 
 
-ks1 = knapSack triple1 150 :: NegInf Double
-ks2 = knapSack triple1 150 :: Path (NegInf Double)
-ks3 = knapSack triple2 150 :: NegInf (Decomposed Double)
-ks4 = knapSack triple2 150 :: Path (NegInf (Decomposed Double))
+ks1 = knapSack triple1 150 :: Small Double
+ks2 = knapSack triple1 150 :: Path (Small Double)
+ks3 = knapSack triple2 150 :: Small (Decomposed Double)
+ks4 = knapSack triple2 150 :: Path (Small (Decomposed Double))
 
 k  = ks3 -- [20.0,8.0,14.0,2.0,-10.0]
-k' = (Fin . Values) [15.5,3.5,15,2,-6] -- [28,5,7,4,-11] 
+k' = (Finite' . Values) [15.5,3.5,15,2,-6] -- [28,5,7,4,-11] 
 
 -- [28,5,7,4,-11] for (30,40,20,60) ["Shell","BMW","WHO","Lufthansa"]
 -- [15.5,3.5,15,2,-6] for (70,30,50) ["PepsiCo","Tesla","Dow Chemicals"]
@@ -109,7 +109,7 @@ domKS = explainWith categories k k'
 
 type Path1  l = View1 l [Name]
 
-instance KS Double (Path1 (NegInf Double)) where
-  result (e,l) = V1 (Fin l) (Just [e])
+instance KS Double (Path1 (Small Double)) where
+  result (e,l) = V1 (Finite' l) (Just [e])
 
-ks5 = knapSack triple1 150 :: Path1 (NegInf Double)
+ks5 = knapSack triple1 150 :: Path1 (Small Double)

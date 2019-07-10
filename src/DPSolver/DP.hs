@@ -14,12 +14,12 @@ f :: ind -> DPSubValue ind (Identity val)
 f =  DPNode ()
 
 
-memoize :: ind -> DPSubValue ind (Identity val)
-memoize =  DPNode ()
+memo :: ind -> DPSubValue ind (Identity val)
+memo =  DPNode ()
 
 -- | Lift a semiring value into a DPSubValue. 
-constant :: CellVal cell -> DPSubValue index cell
-constant = Constant
+inj :: CellVal cell -> DPSubValue index cell
+inj = Constant
 
 
 -- | A dynamic program. 

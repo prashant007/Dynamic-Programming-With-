@@ -18,9 +18,11 @@ import Semiring.Semiring
 import Semiring.Large
 import Semiring.View
 
-import Explanation.Decomposed
---import Explanation.Labeled
-import Explanation.Dominators
+import Explain.Decomposed
+import Explain.Labeled
+import Explain.Dominators
+import Explain.Principal
+import Explain.AutoExplain
 
 import Data.List (sortBy)
 import Data.Function (on)
@@ -51,9 +53,9 @@ class Semiring r => SP l r where
 
   sp :: Graph l -> Node -> DP (Node,Int) r
   sp g s (v,0) = if s==v then one else zero
-  sp g s (v,i) = memoize (v,i-1) <+>
-                  sconcat [memoize (u,i-1) <.>
-                    (constant.result) e | e@((u,v'),_) <- g, v' == v]
+  sp g s (v,i) = memo (v,i-1) <+>
+                  sconcat [memo (u,i-1) <.>
+                    (inj.result) e | e@((u,v'),_) <- g, v' == v]
 
   shortestPath :: Graph l -> Node -> Node -> r
   shortestPath g s t = runDP (sp g s) (t,noNodes g-1)
@@ -82,7 +84,7 @@ instance SP Double (Large Double) where
 -- (2) path, non-decomposed
 --
 instance SP Double (Path (Large Double)) where
-  result (e,l) = V (Finite l) [e]
+  result (e,l) = View (Finite l) [e]
 
 -- (3) length, decomposed
 --
@@ -101,7 +103,7 @@ instance SP [Double] (Large (Decomposed Double)) where
 --
 -- instance SP [Double] (Path DOUBLES) where
 instance SP [Double] (Path (Large (Decomposed Double))) where
-  result (e,l) = V (Finite (Values l)) [e]
+  result (e,l) = View (Finite (Values l)) [e]
 
 -- Examples
 --
@@ -173,3 +175,4 @@ categories = ["Distance","Traffic","Weather","Construction"]
 
 domX = explainWith categories p p'
 -- explainWith ["Distance","Traffic","Weather","Construction"] p p'
+

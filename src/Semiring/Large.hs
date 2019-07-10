@@ -4,6 +4,7 @@ module Semiring.Large where
 
 import Semiring.Semiring
 import Text.Printf
+import Semiring.View 
 -- ======================
 -- Min-Plus / Tropical
 --
@@ -32,9 +33,11 @@ instance (Num a,Ord a) => Semiring (Large a) where
   {zero = Infinity; one = Finite 0; (<+>) = min; (<.>) = (+)}
 
 
+-- Selector instances for View semiring
+--
+instance Ord a => Selector (Large a) where
+  first = (<=)
+
 instance Show a => Show (Large a) where
-  show m = 
-    case m of
-      Finite d  -> show d 
-      Infinity -> "Inf"
-   
+  show Infinity   = "infinity"
+  show (Finite a) = show a

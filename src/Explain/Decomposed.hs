@@ -1,4 +1,4 @@
-module Explanation.Decomposed where
+module Explain.Decomposed where
 import Data.Function (on)
 
 newtype Decomposed a = Values {values :: [a]} deriving Show

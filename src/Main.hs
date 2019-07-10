@@ -1,7 +1,7 @@
 module Main where
 
 import Semiring.Large
-import Explanation.Decomposed
+import Explain.Decomposed
 
 --import Examples.Fibonacci
 --import Examples.ShortestPath

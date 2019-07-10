@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses, FunctionalDependencies #-}
 
-module Explanation.Dominators where
+module Explain.Dominators where
 
 
 import Data.Set (powerSet,fromList,toList)
@@ -11,8 +11,8 @@ import Data.Function (on)
 
 import Semiring.Semiring
 
-import Explanation.Decomposed
-import Explanation.Labeled 
+import Explain.Decomposed
+import Explain.Labeled 
 import Semiring.Large -- remove later
 
 
