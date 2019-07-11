@@ -1,3 +1,11 @@
+{-
+****************************************************************************************************************
+This code is primarily Sasha Rush's Pragmatic DP Haskell library (http://hackage.haskell.org/package/DP-0.1.1/).
+The SolverAPI.hs file doesn't change anything from Sasha Rush's original file of the same name in the aforementioned 
+library.
+****************************************************************************************************************
+-}
+
 {-# LANGUAGE TypeFamilies #-}
 module DPSolver.SolverAPI (
                   -- * Solvers 

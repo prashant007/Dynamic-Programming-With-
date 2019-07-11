@@ -1,3 +1,50 @@
+{-
+****************************************************************************************************************
+This code is primarily Sasha Rush's Pragmatic DP Haskell library (http://hackage.haskell.org/package/DP-0.1.1/). 
+The Internals.hs module make some changes to the original file in the library of the same name. The specific changes 
+made to this code are provided as comments here. These are changes owing to the different semiring 
+formulation that we have.  
+
+-- ====================================================================================================
+-- ====================================================================================================
+Our code has 
+
+optFunc Plus = (<+>)
+optFunc Times = (<.>)
+
+--- =========================instead of=============================================================== 
+
+optFunc Plus = mappend
+optFunc Times = times
+
+-- ====================================================================================================
+-- ====================================================================================================
+Our code has 
+
+instance (Semiring (CellVal cell)) => Semiring (DPSubValue index cell ) where 
+    zero  = Constant zero 
+    one   = Constant one   
+    (<+>) = Opt Plus
+    (<.>) = Opt Times
+
+--- =========================instead of=============================================================== 
+
+instance (Monoid (CellVal cell)) => Monoid (DPSubValue index cell ) where 
+    mappend = Opt Plus
+    mempty  = Constant mempty
+
+instance (Multiplicative (CellVal cell)) => Multiplicative (DPSubValue index  cell ) where 
+    times = Opt Times
+    one  = Constant one
+instance Semiring (CellVal cell) =>  Semiring (DPSubValue index  cell)
+
+data DPState m chart ind cell = DPState { 
+     dpLookup :: ind -> StateT (DPState m chart ind cell) m cell,
+     dpData :: chart 
+}
+****************************************************************************************************************
+-}
+
 {-# LANGUAGE GeneralizedNewtypeDeriving, FlexibleContexts, FlexibleInstances, TypeFamilies, KindSignatures, 
              ExistentialQuantification, ConstraintKinds
 #-}
@@ -58,20 +105,6 @@ data DPSubValue index cell  =
     Constant (CellVal cell) | 
     Opt DPOpt (DPSubValue index cell) (DPSubValue index cell) 
 
-
--- instance Semigroup (DPSubValue index cell) where
---   (<>) = Opt Plus
-
--- instance (Monoid (CellVal cell)) => Monoid (DPSubValue index cell ) where 
---     mappend = Opt Plus
---     mempty  = Constant mempty
-
--- instance (Multiplicative (CellVal cell)) => Multiplicative (DPSubValue index  cell ) where 
---     times = Opt Times
---     one  = Constant one
-
--- instance Semiring (CellVal cell) =>  Semiring (DPSubValue index  cell)
-
 -- -------------------------------------------------------------------
 instance (Semiring (CellVal cell)) => Semiring (DPSubValue index cell ) where 
     zero  = Constant zero 
@@ -127,7 +160,6 @@ reduce (DPNode n i)   = do
    state <- get
    cell  <- dpLookup state i 
    return $ cellLookup n cell 
-
 
 -- ===============================================================================
 type Partial = HasCallStack

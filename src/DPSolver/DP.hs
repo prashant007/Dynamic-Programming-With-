@@ -1,3 +1,22 @@
+{-
+****************************************************************************************************************
+This code is primarily Sasha Rush's Pragmatic DP Haskell library (http://hackage.haskell.org/package/DP-0.1.1/).
+The DP.hs file make some changes from Sasha Rush's original file of the same name in the aforementioned 
+library. These changes are:
+
+1) Functions memo and inj defined here are not part of the original code. 
+2) The DPGen type synonym is called DP in the orifinal file. This type change propagates to
+   the fromSimple function which is of DPGen now instead of DP. We made this change as we wanted
+   to use DP type synonym elsewhere.
+
+-- | A dynamic program. 
+type DPGen index cell = index -> DPCell index ce
+-- | Convert a Simple DP to a General DP 
+
+fromSimple :: SimpleDP a b -> DPGen a (Identity b)
+fromSimple simple i = mkCell [mkItem () (simple i)] 
+****************************************************************************************************************
+-}
 module DPSolver.DP where
 
 import DPSolver.Internals
